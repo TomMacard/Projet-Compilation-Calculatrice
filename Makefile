@@ -1,6 +1,10 @@
 make:
-	gcc main.c -o main
-	./main
+	gcc -o prog main.c lexer.c
+	./prog
 
 clean:
-	rm main
+	rm prog
+
+debug:
+	gcc -g -o prog main.c lexer.c
+	gdb prog

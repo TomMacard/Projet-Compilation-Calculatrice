@@ -2,26 +2,41 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#include <sys/wait.h>
 #include <stdbool.h>
+
+#include "lexer.h"
+
+
+
 
 int main() {
 
-    char* input;
+    char input[256];
     while (true) {
 
         //afficher le prompt
-        printf(">");
+        printf("> ");
 
         // lire l'entrée de l'utilisateur
-        fgets(input, sizeof(input), stdin);
+        fgets(input, 256, stdin);
 
         // Si "q" -> quitter
         if (strcmp(input, "q\n") == 0) {
             break;
         }
 
-        // afficher l'entrée de l'utilisateur
-        printf("Input: %s", input);
+        // (DEBUG) afficher entrée utilisateur
+        //printf("Input: %s", input);
+
+        // Tokenize l'entrée de l'utilisateur
+        TokenListe *tokens = analyse_lexicale(input);
+
+        // (DEGUG) Affiche liste tokens
+        debug_afficher_tokens(tokens);
+        
+        
+
+
     }
 }
+
