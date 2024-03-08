@@ -1,25 +1,15 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdbool.h>
+#ifndef PARSER_H
+#define PARSER_H
 
-
-// Structures
-
-typedef enum {
-    DECALE,
-    REDUIR,
-    ACCEPT,
-    ERREUR
-} Action;
-
+// Définition de la tableSLR
+#define TABLE_SIZE 10
+#define TOKEN_COUNT 6
 
 typedef struct {
-    Action action;
-    int etatSuivant;
+  enum { ERREUR, DECALE, REDUIR, ACCEPT } type ;
+  int value;
 } TableSLR;
 
+int computeSLR(char** input_tokens, int token_count, TableSLR tableSLR[TABLE_SIZE][TOKEN_COUNT]);
 
-// Fonctions
-
-bool analyse_syntaxique(TokenListe liste);
+#endif /* PARSER_H */

@@ -1,55 +1,45 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
-#include <stdbool.h>
+#include <ctype.h>
 
-#include "lexer.h"
 #include "parser.h"
+#include "lexer.h"
 
-
-
+TableSLR tableSLR[TABLE_SIZE][TOKEN_COUNT] = {
+    { {ERREUR, 0}, {ERREUR, 0}, {DECALE, 2}, {ERREUR, 0}, {DECALE, 3}, {ERREUR, 0}}
+  , { {DECALE, 4}, {DECALE, 5}, {ERREUR, 0}, {ERREUR, 0}, {ERREUR, 0}, {ACCEPT, 0}}
+  , { {ERREUR, 0}, {ERREUR, 0}, {DECALE, 2}, {ERREUR, 0}, {DECALE, 3}, {ERREUR, 0}}
+  , { {REDUIR, 4}, {REDUIR, 4}, {ERREUR, 0}, {REDUIR, 4}, {ERREUR, 0}, {REDUIR, 4}}
+  , { {ERREUR, 0}, {ERREUR, 0}, {DECALE, 2}, {ERREUR, 0}, {DECALE, 3}, {ERREUR, 0}}
+  , { {ERREUR, 0}, {ERREUR, 0}, {DECALE, 2}, {ERREUR, 0}, {DECALE, 3}, {ERREUR, 0}}
+  , { {DECALE, 4}, {DECALE, 5}, {ERREUR, 0}, {DECALE, 9}, {ERREUR, 0}, {ERREUR, 0}}
+  , { {REDUIR, 1}, {DECALE, 5}, {ERREUR, 0}, {REDUIR, 1}, {ERREUR, 0}, {REDUIR, 1}}
+  , { {REDUIR, 2}, {REDUIR, 2}, {ERREUR, 0}, {REDUIR, 2}, {ERREUR, 0}, {REDUIR, 2}}
+  , { {REDUIR, 3}, {REDUIR, 3}, {ERREUR, 0}, {REDUIR, 3}, {ERREUR, 0}, {REDUIR, 3}} 
+};
 
 int main() {
+  char expression[] = "2*3";
+  int token_count;
 
-    char input[256];
-    while (true) {
+  // lexer
+  char** tokens = tokenize(expression, &token_count);
 
-        //afficher le prompt
-        printf("> ");
+  // Affichage des tokens séparés
+  printf("Tokens :\n");
+  for (int i = 0; i < token_count; i++) {
+    printf("%s\n", tokens[i]);
+  }
 
-        // lire l'entrée de l'utilisateur
-        fgets(input, 256, stdin);
+  // parser
+  computeSLR(tokens, token_count, tableSLR);
+  
+  // Libérer la mémoire allouée pour les tokens
+  for (int i = 0; i < token_count; i++) {
+    free(tokens[i]);
+  }
+  free(tokens);
 
-        // Si "q" -> quitter
-        if (strcmp(input, "q\n") == 0) {
-            break;
-        }
-
-        // (DEBUG) afficher entrée utilisateur
-        //printf("Input: %s", input);
-
-        // Tokenize l'entrée de l'utilisateur
-        TokenListe *tokens = analyse_lexicale(input);
-
-        // (DEGUG) Affiche liste tokens
-        debug_afficher_tokens(tokens);
-
-        bool resultat_parser = analyse_syntaxique(*tokens);
-
-        if (resultat_parser) {
-            printf ("Parser: valide\n");
-        }
-        else {
-            printf("Parser :non valide\n");
-        }
-
-
-        
-        
-        
-
-
-    }
+  return 0;
 }
-

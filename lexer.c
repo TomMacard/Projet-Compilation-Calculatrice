@@ -1,121 +1,62 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdbool.h>
+#include <ctype.h>
 
-#include "lexer.h"
+#define OPERATORS "+-*/"
 
-Token *get_token_suivant(char **input) {
-
-    // Elimine les blancs
-    while (**input == ' ') (*input)++;
-
-
-    // Analyse tokens
-    // Seul le token NUM a une valeur
-    if (**input == '\n' || **input == '\0') {
-        Token *token = malloc(sizeof(Token));
-        token->type = TOKEN_EOI;
-        return token;
-    }
-    if (**input == '+') {
-        (*input)++;
-        Token *token = malloc(sizeof(Token));
-        token->type = TOKEN_PLUS;
-        return token;
-    }
-    if (**input == '*') {
-        (*input)++;
-        Token *token = malloc(sizeof(Token));
-        token->type = TOKEN_MUL;
-        return token;
-    }
-    if (**input == '(') {
-        (*input)++;
-        Token *token = malloc(sizeof(Token));
-        token->type = TOKEN_PO;
-        return token;
-    }
-    if (**input == ')') {
-        (*input)++;
-        Token *token = malloc(sizeof(Token));
-        token->type = TOKEN_PF;
-        return token;
-    }
-    if (**input >= '0' && **input <= '9') {
-        char *fin;
-        // On fait le choix de tout convertir en flottant, même s'il s'agit d'opérations entre entiers
-        float val = strtof(*input, &fin);
-        *input = fin;
-
-        Token *token = malloc(sizeof(Token));
-        token->type = TOKEN_NUM;
-        token->valeur = val;
-        return token;
-    }
-
-    printf("(ERREUR) Caractère Invalide : %c\n", **input);
-    exit(1);
+// Fonction pour vérifier si un caractère est un opérateur arithmétique
+int is_operator(char c) {
+  return strchr(OPERATORS, c) != NULL;
 }
 
+// Fonction pour séparer la chaîne en tokens
+char** tokenize(char* expression, int* token_count) {
+  // Initialisation de la mémoire pour stocker les tokens
+  char** tokens = (char**)malloc(strlen(expression) * sizeof(char*));
+  if (tokens == NULL) {
+    printf("Allocation de mémoire échouée\n");
+    exit(EXIT_FAILURE);
+  }
 
-TokenListe *analyse_lexicale(char *input) {
-    TokenListe *tete = NULL;
-    TokenListe *queue = NULL;
-
-    while (true) {
-        Token *token = get_token_suivant(&input);
-        TokenListe *noeud = malloc(sizeof(TokenListe));
-        if (noeud == NULL) {
-            printf("(ERREUR) Allocation mémoire noeud\n");
-            exit(1);
-        }
-        noeud->token = token;
-        noeud->suivant = NULL;
-
-        if (tete == NULL) {
-            tete = noeud;
-            queue = noeud;
-        } else {
-            queue->suivant = noeud;
-            queue = noeud;
-        }
-        if (token->type == TOKEN_EOI) {
-            break;
-        }
+  int i = 0;
+  char* token = expression;
+  while (*token != '\0') {
+    // Si le caractère est un espace, passer au suivant
+    if (isspace(*token)) {
+      token++;
+      continue;
     }
-    return tete;
-}
 
-
-void debug_afficher_tokens(TokenListe *tokens) {
-    TokenListe *actuel = tokens;
-    while (actuel != NULL) {
-        switch (actuel->token->type) {
-            case TOKEN_EOI:
-                printf("EOI");
-                break;
-            case TOKEN_PLUS:
-                printf("PLUS");
-                break;
-            case TOKEN_MUL:
-                printf("MUL");
-                break;
-            case TOKEN_PO:
-                printf("PO");
-                break;
-            case TOKEN_PF:
-                printf("PF");
-                break;
-            case TOKEN_NUM:
-                printf("(NUM: %f)", actuel->token->valeur);
-                break;
-            default:
-                printf("(ERREUR) Type Inconnu : %d\n", actuel->token->type);
-                break;
-        }
-        printf(", ");
-        actuel = actuel->suivant;
+    // Si le caractère est un opérateur, le considérer comme un token
+    if (is_operator(*token)) {
+      tokens[i] = (char*)malloc(2 * sizeof(char));
+      if (tokens[i] == NULL) {
+	printf("Allocation de mémoire échouée\n");
+	exit(EXIT_FAILURE);
+      }
+      tokens[i][0] = *token;
+      tokens[i][1] = '\0';
+      token++;
+      i++;
+    } else { // Sinon, trouver le prochain opérateur ou espace
+      char* start = token;
+      while (*token != '\0' && !isspace(*token) && !is_operator(*token)) {
+	token++;
+      }
+      int length = token - start;
+      tokens[i] = (char*)malloc((length + 1) * sizeof(char));
+      if (tokens[i] == NULL) {
+	printf("Allocation de mémoire échouée\n");
+	exit(EXIT_FAILURE);
+      }
+      strncpy(tokens[i], start, length);
+      tokens[i][length] = '\0';
+      i++;
     }
-    printf("\n");
+  }
+
+  *token_count = i; // Nombre total de tokens
+
+  return tokens;
 }
