@@ -13,7 +13,8 @@ typedef enum {
     TOKEN_PO,
     TOKEN_PF,
     TOKEN_NUM,
-    TOKEN_EOI
+    TOKEN_EOI,
+    TOKEN_E     // Ajoute le non terminal
 } TokenType;
 
 typedef struct {

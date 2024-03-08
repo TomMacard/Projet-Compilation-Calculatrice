@@ -4,7 +4,7 @@
 #include <stdbool.h>
 
 
-
+// Structures
 
 typedef enum {
     DECALE,
@@ -19,5 +19,7 @@ typedef struct {
     int etatSuivant;
 } TableSLR;
 
+
+// Fonctions
 
 bool analyse_syntaxique(TokenListe liste);

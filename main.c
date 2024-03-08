@@ -32,6 +32,7 @@ int main() {
         // Tokenize l'entrée de l'utilisateur
         TokenListe *tokens = analyse_lexicale(input);
 
+        // (DEGUG) Affiche liste tokens
         debug_afficher_tokens(tokens);
 
         bool resultat_parser = analyse_syntaxique(*tokens);
@@ -44,8 +45,7 @@ int main() {
         }
 
 
-        // (DEGUG) Affiche liste tokens
-        //
+        
         
         
 

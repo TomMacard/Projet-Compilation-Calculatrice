@@ -65,10 +65,6 @@ TokenListe *analyse_lexicale(char *input) {
 
     while (true) {
         Token *token = get_token_suivant(&input);
-        if (token->type == TOKEN_EOI) {
-            free(token);
-            break;
-        }
         TokenListe *noeud = malloc(sizeof(TokenListe));
         if (noeud == NULL) {
             printf("(ERREUR) Allocation mémoire noeud\n");
@@ -83,6 +79,9 @@ TokenListe *analyse_lexicale(char *input) {
         } else {
             queue->suivant = noeud;
             queue = noeud;
+        }
+        if (token->type == TOKEN_EOI) {
+            break;
         }
     }
     return tete;
