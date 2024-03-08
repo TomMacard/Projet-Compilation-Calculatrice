@@ -1,5 +1,5 @@
 make:
-	gcc -o prog main.c lexer.c
+	gcc -o prog main.c lexer.c parser.c
 	./prog
 
 clean:

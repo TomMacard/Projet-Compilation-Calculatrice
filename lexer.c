@@ -72,8 +72,8 @@ TokenListe *analyse_lexicale(char *input) {
         TokenListe *noeud = malloc(sizeof(TokenListe));
         if (noeud == NULL) {
             printf("(ERREUR) Allocation mémoire noeud\n");
-        exit(1);
-    }
+            exit(1);
+        }
         noeud->token = token;
         noeud->suivant = NULL;
 

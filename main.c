@@ -5,6 +5,7 @@
 #include <stdbool.h>
 
 #include "lexer.h"
+#include "parser.h"
 
 
 
@@ -31,8 +32,20 @@ int main() {
         // Tokenize l'entrée de l'utilisateur
         TokenListe *tokens = analyse_lexicale(input);
 
-        // (DEGUG) Affiche liste tokens
         debug_afficher_tokens(tokens);
+
+        bool resultat_parser = analyse_syntaxique(*tokens);
+
+        if (resultat_parser) {
+            printf ("Parser: valide\n");
+        }
+        else {
+            printf("Parser :non valide\n");
+        }
+
+
+        // (DEGUG) Affiche liste tokens
+        //
         
         
 

@@ -5,12 +5,14 @@
 
 // Structures
 
-typedef enum {
-    TOKEN_NUM,
+
+// mettre dans rapport structure: réordonné les enum de token pour correspondre à la table SLR
+typedef enum { 
     TOKEN_PLUS,
     TOKEN_MUL,
     TOKEN_PO,
     TOKEN_PF,
+    TOKEN_NUM,
     TOKEN_EOI
 } TokenType;
 
