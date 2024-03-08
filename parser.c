@@ -7,8 +7,6 @@
 #include "parser.h"
 
 // Table est définie en dur
-
-// Rejouter le non terminal E?
 TableSLR Table[10][6] = {
     { {ERREUR, 0}, {ERREUR, 0}, {DECALE, 2}, {ERREUR, 0}, {DECALE, 3}, {ERREUR, 0}}
   , { {DECALE, 4}, {DECALE, 5}, {ERREUR, 0}, {ERREUR, 0}, {ERREUR, 0}, {ACCEPT, 0}}
@@ -44,7 +42,7 @@ Token *depiler(TokenListe **liste) {
 }
 
 
-int table_goto(int entree) {
+int table_E(int entree) {
     switch (entree) {
         case 0:
             return 1;
@@ -99,6 +97,7 @@ bool analyse_syntaxique(TokenListe liste) {
                 break;
             case REDUIR:
                 printf("(DEBUG) Réduction\n");
+                // r1, r2, r3, r4 dans la table
                 switch (RecupTable.etatSuivant) {
                     case 1:
                         // E → E + E
@@ -111,7 +110,7 @@ bool analyse_syntaxique(TokenListe liste) {
                         Eres_plus.type = TOKEN_E;
                         Eres_plus.valeur = E1_plus.valeur + E2_plus.valeur;
                         empiler(&pil, &Eres_plus);
-                        etat=table_goto(etat);
+                        etat=table_E(etat);
                         break;
                     case 2:
                         // E → E * E
@@ -124,7 +123,7 @@ bool analyse_syntaxique(TokenListe liste) {
                         Eres_mul.type = TOKEN_E;
                         Eres_mul.valeur = E1_mul.valeur * E2_mul.valeur;
                         empiler(&pil, &Eres_mul);
-                        etat=table_goto(etat);
+                        etat=table_E(etat);
                         break;
                     case 3:
                         // E → (E)
@@ -132,14 +131,14 @@ bool analyse_syntaxique(TokenListe liste) {
                         Token E = *depiler(&pil);
                         Token PF = *depiler(&pil);
                         empiler(&pil, &E);
-                        etat=table_goto(etat);
+                        etat=table_E(etat);
                         break;
                     case 4:
                         // E → val
                         Token Eval = *depiler(&pil);
                         Eval.type= TOKEN_E;
                         empiler(&pil, &Eval);
-                        etat=table_goto(etat);
+                        etat=table_E(etat);
                         break;
                     default:
                         printf("(ERREUR) Reduction ratée\n");

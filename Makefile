@@ -6,5 +6,5 @@ clean:
 	rm prog
 
 debug:
-	gcc -g -o prog main.c lexer.c
+	gcc -g -o prog main.c lexer.c parser.c
 	gdb prog
