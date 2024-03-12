@@ -67,3 +67,14 @@ void destroyStack(Stack* stack) {
   free(stack->array);
   free(stack);
 }
+
+// Fonction pour afficher le contenu de la pile
+void printStack(Stack* stack) {
+  printf("STACK: ");
+  
+  for(int i = stack->top; i != -1; i--) {
+    printf(" %s ", stack->array[i]);
+  }
+
+  printf("\n");
+}

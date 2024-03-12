@@ -10,6 +10,6 @@ typedef struct {
   int value;
 } TableSLR;
 
-int computeSLR(char** input_tokens, int token_count, TableSLR tableSLR[TABLE_SIZE][TOKEN_COUNT]);
+int computeSLR(char** input_tokens, int token_count, TableSLR tableSLR[TABLE_SIZE][TOKEN_COUNT], char** E);
 
 #endif /* PARSER_H */

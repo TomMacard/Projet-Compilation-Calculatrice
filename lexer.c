@@ -14,6 +14,7 @@ int is_operator(char c) {
 char** tokenize(char* expression, int* token_count) {
   // Initialisation de la mémoire pour stocker les tokens
   char** tokens = (char**)malloc(strlen(expression) * sizeof(char*));
+
   if (tokens == NULL) {
     printf("Allocation de mémoire échouée\n");
     exit(EXIT_FAILURE);
@@ -21,6 +22,7 @@ char** tokenize(char* expression, int* token_count) {
 
   int i = 0;
   char* token = expression;
+
   while (*token != '\0') {
     // Si le caractère est un espace, passer au suivant
     if (isspace(*token)) {

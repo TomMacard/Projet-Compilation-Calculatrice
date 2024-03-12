@@ -19,8 +19,10 @@ TableSLR tableSLR[TABLE_SIZE][TOKEN_COUNT] = {
   , { {REDUIR, 3}, {REDUIR, 3}, {ERREUR, 0}, {REDUIR, 3}, {ERREUR, 0}, {REDUIR, 3}} 
 };
 
+char* E[] = {"1", "-1", "6", "-1", "7", "8", "-1", "-1", "-1", "-1"};
+
 int main() {
-  char expression[] = "2*3";
+  char expression[] = "3.5+2.2";
   int token_count;
 
   // lexer
@@ -33,7 +35,7 @@ int main() {
   }
 
   // parser
-  computeSLR(tokens, token_count, tableSLR);
+  computeSLR(tokens, token_count, tableSLR, E);
   
   // Libérer la mémoire allouée pour les tokens
   for (int i = 0; i < token_count; i++) {

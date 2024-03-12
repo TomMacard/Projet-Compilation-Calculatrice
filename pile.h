@@ -31,4 +31,7 @@ char* top(Stack* stack);
 // Libère la mémoire allouée pour la pile
 void destroyStack(Stack* stack);
 
+// Fonction pour afficher le contenu de la pile
+void printStack(Stack* stack);
+
 #endif /* PILE_H */

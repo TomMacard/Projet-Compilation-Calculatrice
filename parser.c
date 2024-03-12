@@ -6,6 +6,7 @@
 #include "parser.h"
 #include "pile.h"
 
+// Même ordre que dans la table SLR
 int tokenToIndexSLR(char* token) {
   if (isdigit(*token)) {
     return 4; // Nombre
@@ -19,26 +20,31 @@ int tokenToIndexSLR(char* token) {
       return 2;
     case ')':
       return 3;
+    case '\n':
+      return 5;
     default:
       return -1; // Token non reconnu
     }
   }
 }
 
-
 // Fonction pour exécuter l'algorithme SLR
-int computeSLR(char** input_tokens, int token_count, TableSLR tableSLR[TABLE_SIZE][TOKEN_COUNT]) {
+int computeSLR(char** input_tokens, int token_count, TableSLR tableSLR[TABLE_SIZE][TOKEN_COUNT], char** E) {
   int index = 0;
-  char state[10] = "0";
+  input_tokens[token_count] = "\n";
+  char state[2]; // chaine de caractère pour l'état a ajouter à la pile pour decale
   Stack* stack = createStack(); // Création de la pile
-  push(stack, state);
+
+  // On commence par le premiere état de la table SLR
+  push(stack, "0");
 
   while (1) {
+    printStack(stack);
     char* currentToken = input_tokens[index];
     char* tos = top(stack); // Top of the stack
 
     // Vérification de l'index et du token
-    if (index >= token_count) {
+    if (index > token_count) {
       printf("Erreur: Fin prématurée de l'entrée\n");
       return 1;
     }
@@ -46,23 +52,44 @@ int computeSLR(char** input_tokens, int token_count, TableSLR tableSLR[TABLE_SIZ
     // Obtention de l'action à partir de la tableSLR
     TableSLR action = tableSLR[atoi(tos)][tokenToIndexSLR(currentToken)];
 
-    printf("table[%d][%d] = %d\n", atoi(tos), tokenToIndexSLR(currentToken), action.type);
+    printf("action.type : %d, currentTokenIndex: %d \n", action.type, tokenToIndexSLR(currentToken));
 
     switch (action.type) {
     case ACCEPT:
-      printf("Accepté\n");
       return 0;
+    case DECALE:
+      printf("decale\n");
+      index++;
+      push(stack, currentToken);
+            printf("DÉCALÉ ");
+      printStack(stack);
+      state[0] = '0' + action.value;
+      state[1] = '\0';
+      printf("STATE: %s\n", state);
+      push(stack, state);
+      break;
+    case REDUIR:
+      printf("réduit\n");
+      // Condition en fonction du nombre d'élements de la grammaire
+      if(action.value == 4) {
+	// Dépiler 2 éléments de la pile
+	for(size_t i = 0; i<2; i++)
+	  pop(stack);
+      }
+      else if(action.value >= 1 || action.value <= 3 ) {
+	// Dépiler 6 éléments de la pile
+	for(size_t i = 0; i<6; i++)
+	  pop(stack);
+      }
+
+      char *action = E[atoi(top(stack))];
+
+      push(stack, "E");
+      push(stack, action);
+      break;
     case ERREUR:
       printf("Erreur\n");
       return 1;
-    case DECALE:
-      printf("décaler\n");
-      index++;
-      push(stack, currentToken);
-      push(stack, state);
-      sprintf(state, "%d", action.value);
-      break;
-      // Ajouter le cas pour réduire ici
     default:
       printf("Action inconnue\n");
       return 1;
