@@ -29,7 +29,7 @@ int tokenToIndexSLR(char* token) {
 }
 
 // Fonction pour exécuter l'algorithme SLR
-int computeSLR(char** input_tokens, int token_count, TableSLR tableSLR[TABLE_SIZE][TOKEN_COUNT], char** E) {
+int computeSLR(char** input_tokens, int token_count, TableSLR tableSLR[TABLE_SIZE][TOKEN_COUNT], char** E, Stack** stackNpi) {
   int index = 0;
   input_tokens[token_count] = "\n";
   char* actionReduction = calloc(2, sizeof(char)), *state;
@@ -39,7 +39,6 @@ int computeSLR(char** input_tokens, int token_count, TableSLR tableSLR[TABLE_SIZ
   push(stack, "0");
 
   while (1) {
-    printStack(stack);
     char* currentToken = input_tokens[index];
     char* tos = top(stack); // Top of the stack
 
@@ -52,37 +51,38 @@ int computeSLR(char** input_tokens, int token_count, TableSLR tableSLR[TABLE_SIZ
     // Obtention de l'action à partir de la tableSLR
     TableSLR action = tableSLR[atoi(tos)][tokenToIndexSLR(currentToken)];
 
-    printf("action.type : %d, currentTokenIndex: %d \n", action.type, tokenToIndexSLR(currentToken));
-
     switch (action.type) {
     case ACCEPT:
-      printf("accept\n");
+      destroyStack(stack); // Libération de la mémoire de la pile
       return 0;
     case DECALE:
-      state = calloc(2, sizeof(char)); // chaine de caractère pour l'état a ajouter à la pile pour decale
-      printf("decale\n");
+      // chaine de caractère pour l'état a ajouter à la pile pour decale
+      state = calloc(2, sizeof(char));
       index++;
       push(stack, currentToken);
-      printf("DÉCALÉ ");
-      printStack(stack);
-      // Mémoire du précédent state de la pile écrasé pour être remplacé par celui ci
       sprintf(state, "%d", action.value);
-      printf("DÉCALÉ after ");
-      printStack(stack);
       push(stack, state);
       break;
     case REDUIR:
-      printf("réduit\n");
       // Condition en fonction du nombre d'élements de la grammaire
       if(action.value == 4) {
 	// Dépiler 2 éléments de la pile
-	for(size_t i = 0; i<2; i++)
-	  pop(stack);
+	pop(stack);
+	// Prend la valeur enlever pour évaluer par la suite
+	push(*stackNpi, top(stack));
+	pop(stack);
       }
       else if(action.value >= 1 || action.value <= 3 ) {
 	// Dépiler 6 éléments de la pile
-	for(size_t i = 0; i<6; i++)
+	for(size_t i = 0; i<6; i++) {
 	  pop(stack);
+	  if(i%2 == 0
+	     && strcmp("E", top(stack)) != 0
+	     && strcmp("(", top(stack))
+	     && strcmp(")", top(stack))) {
+	    push(*stackNpi, top(stack));
+	  }
+	}
       }
 
       actionReduction = E[atoi(top(stack))];
@@ -91,14 +91,17 @@ int computeSLR(char** input_tokens, int token_count, TableSLR tableSLR[TABLE_SIZ
       push(stack, actionReduction);
       break;
     case ERREUR:
-      printf("Erreur\n");
+      printf("Erreur dans l'analyse LR\n");
+      destroyStack(stack); // Libération de la mémoire de la pile
       return 1;
     default:
       printf("Action inconnue\n");
+      destroyStack(stack); // Libération de la mémoire de la pile
       return 1;
     }
   }
 
   destroyStack(stack); // Libération de la mémoire de la pile
+  destroyStack(*stackNpi); // Libération de la mémoire de la pile
   return 0;
 }

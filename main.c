@@ -5,6 +5,8 @@
 
 #include "parser.h"
 #include "lexer.h"
+#include "pile.h"
+#include "evaluate.h"
 
 TableSLR tableSLR[TABLE_SIZE][TOKEN_COUNT] = {
     { {ERREUR, 0}, {ERREUR, 0}, {DECALE, 2}, {ERREUR, 0}, {DECALE, 3}, {ERREUR, 0}}
@@ -22,26 +24,38 @@ TableSLR tableSLR[TABLE_SIZE][TOKEN_COUNT] = {
 char* E[] = {"1", "-1", "6", "-1", "7", "8", "-1", "-1", "-1", "-1"};
 
 int main() {
-  char expression[] = "3.5*2.2";
-  int token_count;
+  int token_count, parserResult;
+  double result;
+  char input[420];
+  Stack* stackNpi = createStack();
 
-  // lexer
-  char** tokens = tokenize(expression, &token_count);
+  while(1) {
+    // Affiche le prompt
+    printf("> ");
 
-  // Affichage des tokens séparés
-  printf("Tokens :\n");
-  for (int i = 0; i < token_count; i++) {
-    printf("%s\n", tokens[i]);
+    // lire l'entrée de l'utilisateur
+    fgets(input, 420, stdin);
+
+    // Si "q" -> quitter
+    if(strcmp(input, "q\n") == 0)
+      break;
+    
+    // Lexer
+    char** tokens = tokenize(input, &token_count);
+
+    // Parser
+    parserResult = computeSLR(tokens, token_count, tableSLR, E, &stackNpi);
+
+    // Si le parsing n'a pas rencontré de problème
+    if(parserResult == 0) {
+      // Inverser la pile npi
+      reverseStack(stackNpi);
+
+      // Evaluer l'expression
+      result = evaluateNPI(stackNpi);
+      printf("%f\n", result);
+    }
   }
-
-  // parser
-  computeSLR(tokens, token_count, tableSLR, E);
   
-  // Libérer la mémoire allouée pour les tokens
-  for (int i = 0; i < token_count; i++) {
-    free(tokens[i]);
-  }
-  free(tokens);
-
   return 0;
 }

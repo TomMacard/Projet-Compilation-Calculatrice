@@ -2,7 +2,7 @@ CC = gcc
 CFLAGS = -Wall -Wextra -g
 
 # List of source files
-SRCS = lexer.c main.c parser.c pile.c
+SRCS = lexer.c main.c parser.c pile.c evaluate.c
 
 # List of object files
 OBJS = $(SRCS:.c=.o)

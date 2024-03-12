@@ -62,6 +62,30 @@ char* top(Stack* stack) {
   return stack->array[stack->top];
 }
 
+// Fonction pour inverser une pile
+void reverseStack(Stack* stack) {
+  // Création d'un tableau temporaire pour stocker les éléments de la pile
+  char** temp_array = (char**)malloc(stack->capacity * sizeof(char*));
+  if (temp_array == NULL) {
+    printf("Allocation de mémoire pour le tableau temporaire échouée\n");
+    return;
+  }
+
+  // Transfert des éléments de la pile dans le tableau temporaire
+  int index = 0;
+  while (!isEmpty(stack)) {
+    temp_array[index++] = pop(stack);
+  }
+
+  // Rétablissement de l'ordre inverse dans la pile
+  for (int i = 0; i < index; i++) {
+    push(stack, temp_array[i]);
+  }
+
+  // Libération de la mémoire allouée pour le tableau temporaire
+  free(temp_array);
+}
+
 // Libère la mémoire allouée pour la pile
 void destroyStack(Stack* stack) {
   free(stack->array);

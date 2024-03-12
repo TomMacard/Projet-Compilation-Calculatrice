@@ -28,6 +28,9 @@ char* pop(Stack* stack);
 // Retourne le sommet de la pile (sans dépiler)
 char* top(Stack* stack);
 
+// Fonction pour inverser une pile
+void reverseStack(Stack* stack);
+
 // Libère la mémoire allouée pour la pile
 void destroyStack(Stack* stack);
 
