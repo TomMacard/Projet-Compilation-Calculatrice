@@ -32,7 +32,7 @@ int tokenToIndexSLR(char* token) {
 int computeSLR(char** input_tokens, int token_count, TableSLR tableSLR[TABLE_SIZE][TOKEN_COUNT], char** E) {
   int index = 0;
   input_tokens[token_count] = "\n";
-  char state[2]; // chaine de caractère pour l'état a ajouter à la pile pour decale
+  char* actionReduction = calloc(2, sizeof(char)), *state;
   Stack* stack = createStack(); // Création de la pile
 
   // On commence par le premiere état de la table SLR
@@ -56,16 +56,19 @@ int computeSLR(char** input_tokens, int token_count, TableSLR tableSLR[TABLE_SIZ
 
     switch (action.type) {
     case ACCEPT:
+      printf("accept\n");
       return 0;
     case DECALE:
+      state = calloc(2, sizeof(char)); // chaine de caractère pour l'état a ajouter à la pile pour decale
       printf("decale\n");
       index++;
       push(stack, currentToken);
-            printf("DÉCALÉ ");
+      printf("DÉCALÉ ");
       printStack(stack);
-      state[0] = '0' + action.value;
-      state[1] = '\0';
-      printf("STATE: %s\n", state);
+      // Mémoire du précédent state de la pile écrasé pour être remplacé par celui ci
+      sprintf(state, "%d", action.value);
+      printf("DÉCALÉ after ");
+      printStack(stack);
       push(stack, state);
       break;
     case REDUIR:
@@ -82,10 +85,10 @@ int computeSLR(char** input_tokens, int token_count, TableSLR tableSLR[TABLE_SIZ
 	  pop(stack);
       }
 
-      char *action = E[atoi(top(stack))];
+      actionReduction = E[atoi(top(stack))];
 
       push(stack, "E");
-      push(stack, action);
+      push(stack, actionReduction);
       break;
     case ERREUR:
       printf("Erreur\n");

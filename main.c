@@ -22,7 +22,7 @@ TableSLR tableSLR[TABLE_SIZE][TOKEN_COUNT] = {
 char* E[] = {"1", "-1", "6", "-1", "7", "8", "-1", "-1", "-1", "-1"};
 
 int main() {
-  char expression[] = "3.5+2.2";
+  char expression[] = "3.5*2.2";
   int token_count;
 
   // lexer

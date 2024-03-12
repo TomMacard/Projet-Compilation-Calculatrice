@@ -1,7 +1,7 @@
 #ifndef PILE_H
 #define PILE_H
 
-#define STACK_CAPACITY 100
+#define STACK_CAPACITY 300
 
 // Structure de la pile
 typedef struct Stack {
