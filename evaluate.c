@@ -36,11 +36,18 @@ double evaluateNPI(Stack* stack) {
 
       switch (*token) {
       case '+':
-	result = operand1 + operand2;
-	break;
+	      result = operand1 + operand2;
+	      break;
       case '*':
-	result = operand1 * operand2;
-	break;
+	      result = operand1 * operand2;
+        break;
+      case '/':
+        if (operand2 == 0) {
+          printf("Division par zéro\n");
+          return -1;
+        }
+	      result = operand1 / operand2;
+	      break;
       default:
 	printf("Opérateur non valide : %s\n", token);
 	return -1;

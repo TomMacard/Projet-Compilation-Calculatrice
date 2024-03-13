@@ -16,6 +16,8 @@ int tokenToIndexSLR(char* token) {
       return 0;
     case '*':
       return 1;
+    case '/':
+      return 1;
     case '(':
       return 2;
     case ')':
