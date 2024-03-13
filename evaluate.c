@@ -6,28 +6,8 @@
 
 // Fonction pour vérifier si une chaîne de caractères est un nombre valide
 int isNumber(const char* str) {
-  int dot_count = 0;
-  int digit_count = 0;
-
-  // Parcours de chaque caractère de la chaîne
-  while (*str) {
-    // Vérifier si le caractère est un chiffre
-    if (isdigit(*str)) {
-      digit_count++;
-    }
-    // Vérifier si le caractère est un point décimal
-    else if (*str == '.') {
-      dot_count++;
-    }
-    // Si le caractère n'est ni un chiffre ni un point décimal, la chaîne n'est pas un nombre
-    else {
-      return 0;
-    }
-    str++;
-  }
-
-  // La chaîne doit contenir au moins un chiffre et peut contenir au plus un point décimal
-  return digit_count > 0 && dot_count <= 1;
+  float result = strtof(str, NULL);
+  return result != 0.0;
 }
 
 
@@ -50,8 +30,8 @@ double evaluateNPI(Stack* stack) {
     // Si le token est un operande
     else {
       // Récupère les deux opérande en haut de pile
-      double operand2 = atof(pop(result_stack));
-      double operand1 = atof(pop(result_stack));
+      double operand2 = strtof(pop(result_stack), NULL);
+      double operand1 = strtof(pop(result_stack), NULL);
 
       switch (*token) {
       case '+':
