@@ -22,4 +22,5 @@ typedef struct {
 
 // Fonctions
 
-bool analyse_syntaxique(TokenListe liste);
+bool analyse_syntaxique(TokenListe *liste);
+bool analyse_syntaxique_original(TokenListe liste);

@@ -59,10 +59,10 @@ int table_E(int entree) {
 }
 
 
-bool analyse_syntaxique(TokenListe liste) {
+bool analyse_syntaxique_original(TokenListe liste) {
     int etat = 0;
     TokenListe *pil = NULL;
-    while (true) {
+    while (liste.suivant != NULL) {
         printf("(DEBUG) Etat : %d\n", etat);
         
         //token tete de pile d'entree
@@ -77,6 +77,7 @@ bool analyse_syntaxique(TokenListe liste) {
 
         // Normalement action jamais a 0, si 0 alors pas bon
         printf("(DEBUG) Action : %d\n", action);
+        printf("Recuptable.action =%d\n",RecupTable.action);
 
         switch (RecupTable.action) {
             case ERREUR:
@@ -89,7 +90,7 @@ bool analyse_syntaxique(TokenListe liste) {
                 printf("(DEBUG) Décalage\n");
                 // Recupere l'etat suivant
                 etat = RecupTable.etatSuivant;
-                //printf("(DEBUG) Etat : %d\n", etat);
+                printf("(DEBUG) Etat suivant: %d\n", etat);
                 //ajoute le token à la pile
                 empiler(&pil, &token_actuel);
                 //enleve le token de la liste d'enytrée
@@ -97,10 +98,12 @@ bool analyse_syntaxique(TokenListe liste) {
                 break;
             case REDUIR:
                 printf("(DEBUG) Réduction\n");
+                printf("(DEBUG) Etat suivant: %d\n", etat);
                 // r1, r2, r3, r4 dans la table
                 switch (RecupTable.etatSuivant) {
                     case 1:
                         // E → E + E
+                        printf("regle 1\n");
                         Token E1_plus = *depiler(&pil); //1er E
                         Token Eplus = *depiler(&pil); //signe +
                         Token E2_plus = *depiler(&pil); //2eme E
@@ -114,6 +117,7 @@ bool analyse_syntaxique(TokenListe liste) {
                         break;
                     case 2:
                         // E → E * E
+                        printf("regle 2\n");
                         Token E1_mul = *depiler(&pil); //1er E
                         Token Emul = *depiler(&pil); //signe *
                         Token E2_mul = *depiler(&pil); //2eme E
@@ -127,6 +131,7 @@ bool analyse_syntaxique(TokenListe liste) {
                         break;
                     case 3:
                         // E → (E)
+                        printf("regle 3\n");
                         Token PO = *depiler(&pil);
                         Token E = *depiler(&pil);
                         Token PF = *depiler(&pil);
@@ -135,10 +140,11 @@ bool analyse_syntaxique(TokenListe liste) {
                         break;
                     case 4:
                         // E → val
+                        printf("regle 4\n");
                         Token Eval = *depiler(&pil);
                         Eval.type= TOKEN_E;
                         empiler(&pil, &Eval);
-                        etat=table_E(etat);
+                        etat=1;
                         break;
                     default:
                         printf("(ERREUR) Reduction ratée\n");
@@ -149,15 +155,58 @@ bool analyse_syntaxique(TokenListe liste) {
                 printf("(ERREUR) Action non reconnue\n");
                 return false;
         }
-
+        /*
         // Passe au token suivant
         if (liste.suivant == NULL) {
             printf("(ERREUR) Fin de liste token atteinte sans erreur ou acceptation\n");
             return false;
-        }
+        }*/
     }
 
     printf("(ERREUR) Impossible d'arriver ici normalement?\n");
-    return false;
 }
 
+
+
+bool analyse_syntaxique(TokenListe *liste) {
+    // Creer pile avec etat initial 0
+    debug_afficher_tokens(liste);
+    TokenListe *pile;
+    pile->token->type=TOKEN_ETAT;
+    pile->token->valeur=0.0;
+    pile->suivant = NULL;
+
+    while (liste != NULL) {
+        debug_afficher_tokens(liste);
+        // Recupere le token actuel
+        Token *token_actuel = liste->token;
+        // Recupere l'etat actuel
+        int etat = pile->token->valeur;
+
+        TableSLR ActionAFaire = Table[etat][token_actuel->type];
+        printf("ActionAFaire.action = %d\n",ActionAFaire.action);
+        printf("ActionAFaire.etatSuivant = %d\n",ActionAFaire.etatSuivant);
+        
+        switch (ActionAFaire.action)
+        {
+            case ERREUR:
+                printf("(PARSER) Erreur Renvoyée par Table SLR\n");
+                return false;
+            case ACCEPT:
+                printf("(PARSER) Accepté\n");
+                return true;
+            case DECALE:
+                printf("(PARSER) Décalage\n");
+                break;
+            default:
+                printf("todo");
+                break;
+        }
+
+
+        //passage au token suivant
+        liste=liste->suivant;
+    }
+
+
+}

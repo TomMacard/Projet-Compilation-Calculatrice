@@ -110,6 +110,9 @@ void debug_afficher_tokens(TokenListe *tokens) {
             case TOKEN_NUM:
                 printf("(NUM: %f)", actuel->token->valeur);
                 break;
+            case TOKEN_ETAT:
+                printf("ETAT: %f", actuel->token->valeur);
+                break;
             default:
                 printf("(ERREUR) Type Inconnu : %d\n", actuel->token->type);
                 break;

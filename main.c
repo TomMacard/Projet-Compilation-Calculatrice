@@ -33,9 +33,9 @@ int main() {
         TokenListe *tokens = analyse_lexicale(input);
 
         // (DEGUG) Affiche liste tokens
-        debug_afficher_tokens(tokens);
+        //debug_afficher_tokens(tokens);
 
-        bool resultat_parser = analyse_syntaxique(*tokens);
+        bool resultat_parser = analyse_syntaxique(tokens);
 
         if (resultat_parser) {
             printf ("Parser: valide\n");
