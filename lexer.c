@@ -3,7 +3,7 @@
 #include <string.h>
 #include <ctype.h>
 
-#define OPERATORS "+*()/"
+#define OPERATORS "+*()/-"
 
 // Fonction pour vérifier si un caractère est un opérateur arithmétique
 int is_operator(char c) {
