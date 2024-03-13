@@ -1,3 +1,12 @@
+/*
+ * Fichier: main.c
+ * Auteurs: Nicolas FOND-MASSANY
+ *          Tom MACARD
+ * ---------------------
+ * Fichier main de la calulatrice
+ */
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

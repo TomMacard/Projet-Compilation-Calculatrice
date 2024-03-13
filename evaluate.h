@@ -1,3 +1,11 @@
+/*
+ * Fichier: evaluate.h
+ * Auteurs: Nicolas FOND-MASSANY
+ *          Tom MACARD
+ * ---------------------
+ * Evaluateur d'expression (utilisé apres l'analyseur syntaxique)
+ */
+
 #ifndef EVALUATE_H
 #define EVALUATE_H
 

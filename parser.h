@@ -1,3 +1,12 @@
+/*
+ * Fichier: parser.h
+ * Auteurs: Nicolas FOND-MASSANY
+ *          Tom MACARD
+ * ---------------------
+ * Contient la structure dela table SLR
+ * 
+ */
+
 #ifndef PARSER_H
 #define PARSER_H
 

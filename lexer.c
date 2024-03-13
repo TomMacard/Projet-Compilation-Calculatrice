@@ -1,3 +1,12 @@
+/*
+ * Fichier: lexer.c
+ * Auteurs: Nicolas FOND-MASSANY
+ *          Tom MACARD
+ * ---------------------
+ * Ce fichier contient les fonctions pour séparer une chaîne de caractères
+ */
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

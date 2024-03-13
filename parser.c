@@ -1,3 +1,12 @@
+/*
+ * Fichier: parser.c
+ * Auteurs: Nicolas FOND-MASSANY
+ *          Tom MACARD
+ * ---------------------
+ * Contient l'analyseur syntaxique
+ */
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

@@ -1,3 +1,11 @@
+/*
+ * Fichier: lexer.c
+ * Auteurs: Nicolas FOND-MASSANY
+ *          Tom MACARD
+ * ---------------------
+ * Ce fichier contient les fonctions pour séparer une chaîne de caractères
+ */
+
 #ifndef TOKENIZER_H
 #define TOKENIZER_H
 

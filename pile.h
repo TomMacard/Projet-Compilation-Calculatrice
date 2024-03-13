@@ -1,3 +1,11 @@
+/*
+ * Fichier: pile.h
+ * Auteurs: Nicolas FOND-MASSANY
+ *          Tom MACARD
+ * ---------------------
+ * contient la structure de la pile pour l'analyseur syntaxique
+ */
+
 #ifndef PILE_H
 #define PILE_H
 

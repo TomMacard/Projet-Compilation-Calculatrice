@@ -1,3 +1,13 @@
+/*
+ * Fichier: pile.c
+ * Auteurs: Nicolas FOND-MASSANY
+ *          Tom MACARD
+ * ---------------------
+ * fonctions utilitaires pour la pile
+ */
+
+
+
 #include "pile.h"
 #include <stdlib.h>
 #include <stdio.h>

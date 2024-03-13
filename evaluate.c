@@ -1,3 +1,11 @@
+/*
+ * Fichier: evaluate.c
+ * Auteurs: Nicolas FOND-MASSANY
+ *          Tom MACARD
+ * ---------------------
+ * Evaluateur d'expression (utilisé apres l'analyseur syntaxique)
+ */
+
 #include <stdio.h>
 #include <ctype.h>
 #include <stdlib.h>
