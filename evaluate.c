@@ -6,8 +6,9 @@
 
 // Fonction pour vérifier si une chaîne de caractères est un nombre valide
 int isNumber(const char* str) {
-  float result = strtof(str, NULL);
-  return result != 0.0;
+    char* endptr;
+    strtof(str, &endptr);
+    return *endptr == '\0';
 }
 
 
