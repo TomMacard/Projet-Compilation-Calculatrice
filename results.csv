@@ -21,3 +21,6 @@ ceci est un texte, Erreur dans l'analyse LR
 😀*😥, Erreur dans l'analyse LR
 (((2+1)*+34, Erreur dans l'analyse LR
 635.1-1828, -1192.900000
+1/0.000000000000000000000000000000001, 9999999762577725440.000000
+2/(3-3), Division par zéro
+-1.000000
